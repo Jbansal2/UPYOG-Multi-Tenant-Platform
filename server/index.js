@@ -77,6 +77,10 @@ app.get('/api/properties', async (req, res) => {
   }
 });
 
+app.get('/', (req, res) => {
+  res.send('UPYOG Property Tax Analytics API');
+})
+
 // Simple AI endpoint: tries external GROQ if configured, otherwise answers from DB with rule-based handlers
 app.post('/api/ai', async (req, res) => {
   const { question, summary, messages = [] } = req.body || {};
@@ -266,7 +270,7 @@ async function start() {
   }
 
   app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port http://localhost:${PORT}`);
   });
 }
 
