@@ -76,7 +76,7 @@ app.post('/api/login', async (req, res) => {
   if (username === AUTH_USER && password === AUTH_PASS) {
     const token = signToken({ username });
     res.cookie('token', token, getCookieOptions());
-    return res.json({ ok: true });
+    return res.json({ ok: true, user: { username } });
   }
   res.status(401).json({ ok: false, message: 'Invalid credentials' });
 });

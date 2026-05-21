@@ -40,9 +40,8 @@ export function AuthProvider({ children }) {
       const data = await res.json().catch(() => ({}))
       throw new Error(data.error || 'Login failed')
     }
-    const me = await fetch(`${API}/api/me`, { credentials: 'include', cache: 'no-store' })
-    const data = await me.json().catch(() => ({ ok: false, user: null }))
-    setUser(data.user || null)
+    const data = await res.json().catch(() => ({}))
+    setUser(data.user || { username })
     setCredentials({ username, password })
     return true
   }
