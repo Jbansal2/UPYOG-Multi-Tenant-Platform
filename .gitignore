@@ -1,0 +1,39 @@
+# Node
+node_modules/
+
+# Build outputs
+dist/
+build/
+.vite/
+
+# Env files
+.env
+.env.local
+.env.*.local
+
+# Local client/server envs
+client/.env
+server/.env
+
+# Logs
+npm-debug.log*
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Coverage
+coverage/
+
+# Misc
+*.log
