@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
-const API = import.meta.env.VITE_API || 'http://localhost:4000'
+const API = import.meta.env.VITE_API
 
 const AuthContext = createContext(null)
 
@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     async function check() {
       try {
-        const res = await fetch(`${API}/api/me`, { credentials: 'include' })
+        const res = await fetch(`${API}/api/me`, { credentials: 'include', cache: 'no-store' })
         if (res.ok) {
           const data = await res.json()
           setUser(data.user)
@@ -34,20 +34,21 @@ export function AuthProvider({ children }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
       credentials: 'include',
+      cache: 'no-store',
     })
     if (!res.ok) {
       const data = await res.json().catch(() => ({}))
       throw new Error(data.error || 'Login failed')
     }
-    const me = await fetch(`${API}/api/me`, { credentials: 'include' })
-    const data = await me.json()
-    setUser(data.user)
+    const me = await fetch(`${API}/api/me`, { credentials: 'include', cache: 'no-store' })
+    const data = await me.json().catch(() => ({ ok: false, user: null }))
+    setUser(data.user || null)
     setCredentials({ username, password })
     return true
   }
 
   async function logout() {
-    await fetch(`${API}/api/logout`, { method: 'POST', credentials: 'include' })
+    await fetch(`${API}/api/logout`, { method: 'POST', credentials: 'include', cache: 'no-store' })
     setUser(null)
     setCredentials(null)
   }

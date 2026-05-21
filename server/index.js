@@ -87,6 +87,8 @@ app.post('/api/logout', (req, res) => {
 });
 
 app.get('/api/me', (req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.set('Pragma', 'no-cache');
   const token = req.cookies && req.cookies.token;
   const payload = verifyToken(token);
   if (!payload) return res.json({ ok: false, user: null });
