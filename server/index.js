@@ -15,7 +15,14 @@ const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.1-70b-versatile';
 
 // Configure CORS with a safe allowlist. You can set `ALLOWED_ORIGINS` as a
 // comma-separated env var (e.g. "https://app.example.com,http://localhost:5173").
-const defaultOrigins = ['http://localhost:5173', 'https://upyog-multi-tenant-platform.vercel.app'];
+const defaultOrigins = [
+  'http://localhost:5173',
+  'https://upyog-multi-tenant-platform.vercel.app',
+  'https://upyog-multi-tenant-platform-txhd.vercel.app',
+];
+if (process.env.VERCEL_URL) {
+  defaultOrigins.push(`https://${process.env.VERCEL_URL}`);
+}
 const allowedOrigins = (process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : defaultOrigins).map(s => s.trim()).filter(Boolean);
 
 app.use(cors({
