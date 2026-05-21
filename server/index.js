@@ -12,6 +12,16 @@ const PORT = process.env.PORT || 4000;
 const JWT_SECRET = process.env.JWT_SECRET || process.env.JWT || 'dev_secret';
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.1-70b-versatile';
+const isProduction = process.env.NODE_ENV === 'production' || !!process.env.VERCEL;
+
+function getCookieOptions() {
+  return {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: isProduction,
+    path: '/',
+  };
+}
 
 // Configure CORS with a safe allowlist. You can set `ALLOWED_ORIGINS` as a
 // comma-separated env var (e.g. "https://app.example.com,http://localhost:5173").
@@ -65,21 +75,21 @@ app.post('/api/login', async (req, res) => {
 
   if (username === AUTH_USER && password === AUTH_PASS) {
     const token = signToken({ username });
-    res.cookie('token', token, { httpOnly: true, sameSite: 'lax' });
+    res.cookie('token', token, getCookieOptions());
     return res.json({ ok: true });
   }
   res.status(401).json({ ok: false, message: 'Invalid credentials' });
 });
 
 app.post('/api/logout', (req, res) => {
-  res.clearCookie('token');
+  res.clearCookie('token', getCookieOptions());
   res.json({ ok: true });
 });
 
 app.get('/api/me', (req, res) => {
   const token = req.cookies && req.cookies.token;
   const payload = verifyToken(token);
-  if (!payload) return res.status(401).json({ ok: false });
+  if (!payload) return res.json({ ok: false, user: null });
   res.json({ ok: true, user: payload });
 });
 
