@@ -28,6 +28,16 @@ app.use(cors({
   credentials: true,
 }));
 
+// Ensure the Mongo connection exists for both local dev and Vercel serverless runs.
+app.use(async (req, res, next) => {
+  try {
+    await connect();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 function signToken(payload) {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' });
 }
@@ -274,4 +284,8 @@ async function start() {
   });
 }
 
-start();
+if (require.main === module) {
+  start();
+}
+
+module.exports = app;
