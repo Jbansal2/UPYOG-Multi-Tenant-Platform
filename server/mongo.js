@@ -1,6 +1,17 @@
 const { MongoClient } = require('mongodb');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/upyog';
+function resolveMongoUri() {
+  const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
+  if (uri) return uri;
+
+  if (process.env.VERCEL) {
+    throw new Error('Missing MongoDB URI. Set MONGODB_URI (or MONGO_URI) in Vercel environment variables.');
+  }
+
+  return 'mongodb://localhost:27017/upyog';
+}
+
+const MONGODB_URI = resolveMongoUri();
 
 let client;
 let db;

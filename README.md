@@ -33,7 +33,8 @@ Create `.env` in the `server/` folder with at least the following values for loc
 
 ```
 PORT=4000
-MONGO_URI=mongodb://localhost:27017/upyog
+MONGODB_URI=mongodb://localhost:27017/upyog
+# MONGO_URI is also accepted if you prefer that name
 JWT_SECRET=some_secret_here
 AUTH_USER=admin
 AUTH_PASS=secret123
@@ -57,7 +58,7 @@ The server includes a seeding script that reads `client/src/assets/properties.js
 npm run seed:mongo
 ```
 
-Make sure MongoDB is running and `MONGO_URI` in `server/.env` is reachable.
+Make sure MongoDB is running and `MONGODB_URI` (or `MONGO_URI`) in `server/.env` is reachable.
 
 ## Run in development
 
@@ -103,7 +104,7 @@ If you want the AI chat to forward to GROQ's API, set `GROQ_API_KEY` in `server/
 
 ## Troubleshooting
 
-- Server `Exit Code 1`: check `server` terminal logs and ensure `MONGO_URI` is correct and MongoDB is reachable.
+- Server `Exit Code 1`: check `server` terminal logs and ensure `MONGODB_URI` (or `MONGO_URI`) is correct and MongoDB is reachable.
 - CORS issues: ensure `client` dev origin matches `VITE_API_ORIGIN` or use the default `http://localhost:5173`.
 
 ---
