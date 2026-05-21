@@ -13,7 +13,20 @@ const JWT_SECRET = process.env.JWT_SECRET || process.env.JWT || 'dev_secret';
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.1-70b-versatile';
 
-app.use(cors({ origin: process.env.VITE_API_ORIGIN || 'http://localhost:5173', credentials: true }));
+// Configure CORS with a safe allowlist. You can set `ALLOWED_ORIGINS` as a
+// comma-separated env var (e.g. "https://app.example.com,http://localhost:5173").
+const defaultOrigins = ['http://localhost:5173', 'https://upyog-multi-tenant-platform.vercel.app'];
+const allowedOrigins = (process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : defaultOrigins).map(s => s.trim()).filter(Boolean);
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (e.g. mobile apps, curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1) return callback(null, true);
+    return callback(new Error('CORS policy: origin not allowed'));
+  },
+  credentials: true,
+}));
 
 function signToken(payload) {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: '8h' });
